@@ -72,6 +72,8 @@ declare -a args=(
 
     -keymap_file        "${confDirs[0]}/$N/keymap.dat"
 
+    -joy
+
     # TODO: don't hardcode this?
     -videodriver x11
 
@@ -80,7 +82,7 @@ declare -a args=(
 
 #-------------------------------------------------------------------------------
 
-if [[ ${NIX_DEBUG:-0} -gt 1 ]]; then
+if [[ ${NIX_DEBUG:-0} -ge 1 ]]; then
     set -x
 fi
 

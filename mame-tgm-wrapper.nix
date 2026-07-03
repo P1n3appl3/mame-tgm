@@ -2,13 +2,15 @@
 , lib
 , replaceVars
 , runtimeShell
+, imagemagick
 , makeDesktopItem
 , copyDesktopItems
 , mame-tgm
 
-, rom ? null
+, gameName ? null
 , extraArgs ? []
 , desktopItemExtraAttrs ? {}
+, icon ? null
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: let
@@ -18,20 +20,20 @@ stdenvNoCC.mkDerivation (finalAttrs: let
     extraArgs = extraArgs;
   };
 
-  nameSuffix = if rom != null then lib.getName rom else "tgm";
-  mainProgram = "mame-" + nameSuffix;
+  mainProgram = if gameName == null then "tgm-mame" else gameName;
 
   desktopItem = makeDesktopItem {
     name = "MAME Tetris The Grandmaster";
-    desktopName = "MAME TGM";
-    exec = "${mainProgram}";
+    desktopName = "TGM MAME";
+    exec = mainProgram;
+    icon = mainProgram;
     categories = [ "Game" ];
   } // desktopItemExtraAttrs;
 in {
-  pname = "mame-${nameSuffix}-wrapper";
+  pname = "mame-wrapper-${mainProgram}";
   inherit (mame-tgm) version;
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  nativeBuildInputs = [ copyDesktopItems imagemagick ];
   desktopItems = [ desktopItem ];
 
   dontUnpack = true;
@@ -43,6 +45,16 @@ in {
     chmod +x "$out/bin/${mainProgram}"
 
     runHook postBuild
+  '';
+
+  installPhase = lib.optionalString (icon != null) ''
+    runHook preInstall
+
+    dir="$out/share/icons/hicolor/256x256/apps"
+    mkdir -p $dir
+    magick ${icon} -resize '256x256!' $dir/${mainProgram}.png    
+
+    runHook postInstall
   '';
 
   meta = {
