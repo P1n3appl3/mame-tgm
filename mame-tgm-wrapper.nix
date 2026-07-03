@@ -5,7 +5,7 @@
 , imagemagick
 , makeDesktopItem
 , copyDesktopItems
-, mame-tgm
+, mame-tgm-unwrapped
 
 , gameName ? null
 , extraArgs ? []
@@ -16,7 +16,7 @@
 stdenvNoCC.mkDerivation (finalAttrs: let
   script = replaceVars ./mame-tgm-wrapper.bash {
     inherit runtimeShell;
-    mameTgm = lib.getExe mame-tgm;
+    mameTgm = lib.getExe mame-tgm-unwrapped;
     extraArgs = extraArgs;
   };
 
@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation (finalAttrs: let
   } // desktopItemExtraAttrs;
 in {
   pname = "mame-wrapper-${mainProgram}";
-  inherit (mame-tgm) version;
+  inherit (mame-tgm-unwrapped) version;
 
   nativeBuildInputs = [ copyDesktopItems imagemagick ];
   desktopItems = [ desktopItem ];
@@ -59,6 +59,6 @@ in {
 
   meta = {
     inherit mainProgram;
-    inherit (mame-tgm) maintainers;
+    inherit (mame-tgm-unwrapped) maintainers;
   };
 })

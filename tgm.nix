@@ -5,10 +5,10 @@
 , runtimeShell
 , makeDesktopItem
 , copyDesktopItems
-, mame-tgm-wrapped
+, mame-tgm
 }:
 {
-  tgm = (mame-tgm-wrapped.override {
+  tgm = (mame-tgm.override {
     gameName = "tgm";
     extraArgs = [ "-rec" "tgm1.input" "tgmj" ];
     desktopItemExtraAttrs = {
@@ -21,7 +21,7 @@
       hash = "sha256-BRIlnsf2Z7pvYwa7cVHQWmzW+iu+cZ9mPsJCjNLrXSY=";
     };
   });
-  tap = (mame-tgm-wrapped.override {
+  tap = (mame-tgm.override {
     gameName = "tap";
     extraArgs = [ "-rec" "tap.input" "tgm2p" ];
     desktopItemExtraAttrs = {

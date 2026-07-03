@@ -1,19 +1,24 @@
-
 {
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-  outputs = { self, nixpkgs }: let
-    system = "x86_64-linux";
-    pkgs = nixpkgs.legacyPackages.${system};
-  in {
-    packages.${system} = rec {
-      mame-tgm = pkgs.callPackage ./mame-tgm.nix {};
-      mame-tgm-wrapped = pkgs.callPackage ./mame-tgm-wrapper.nix {
-        inherit mame-tgm;
+  inputs.flake-utils.url = "github:numtide/flake-utils";
+  outputs = { self, nixpkgs, flake-utils }: {
+      overlays.default = final: prev: {
+        mame-tgm-unwrapped = final.callPackage ./mame-tgm.nix { };
+        mame-tgm = final.callPackage ./mame-tgm-wrapper.nix { };
+        tgm-games = final.callPackage ./tgm.nix { };
       };
-      default = mame-tgm-wrapped;
-
-    inherit (pkgs.callPackage ./tgm.nix { inherit mame-tgm-wrapped; }) tap tgm;
-    };
-    checks.${system} = self.packages.${system}.mame-tgm.tests;
-  };
+    }
+    // (flake-utils.lib.eachDefaultSystem (system:
+      let
+        pkgs = nixpkgs.legacyPackages.${system}.extend self.overlays.default;
+      in
+      {
+        packages = {
+          default = pkgs.mame-tgm;
+          inherit (pkgs) mame-tgm;
+          inherit (pkgs.tgm-games) tap tgm;
+        };
+        checks = pkgs.mame-tgm-unwrapped.tests;
+      }
+    ));
 }
