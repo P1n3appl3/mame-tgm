@@ -34,8 +34,11 @@
     };
   in {
     packages.${system} = rec {
-      mame-tgm = pkgs.callPackage ./shmup-mame-tgm.nix {};
-      default = mame-tgm;
+      mame-tgm = pkgs.callPackage ./mame-tgm.nix {};
+      mame-tgm-wrapped = pkgs.callPackage ./mame-tgm-wrapper.nix {
+        inherit mame-tgm;
+      };
+      default = mame-tgm-wrapped;
     };
     checks.${system} = self.packages.${system}.mame-tgm.tests;
   };

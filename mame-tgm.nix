@@ -50,15 +50,15 @@ in {
     runHook postInstall
   '';
 
-  passthru = {
+  passthru = let package = finalAttrs.finalPackage; in {
     tests.smoke = testers.testVersion {
-      package = finalAttrs.finalPackage;
+      inherit package;
       command = "${finalAttrs.meta.mainProgram} -h";
       version = "v0.137"; # MAME version
     };
 
-    defaultConfig = runCommand (finalAttrs.name + "-default-config") {} ''
-      ${lib.getExe finalAttrs.finalPackage} -createconfig
+    defaultConfig = runCommand (package.name + "-default-config") {} ''
+      ${lib.getExe package} -createconfig
       mv mame.ini $out
     '';
   };
