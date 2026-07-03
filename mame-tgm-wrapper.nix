@@ -22,13 +22,13 @@ stdenvNoCC.mkDerivation (finalAttrs: let
 
   mainProgram = if gameName == null then "tgm-mame" else gameName;
 
-  desktopItem = makeDesktopItem {
-    name = "MAME Tetris The Grandmaster";
-    desktopName = "TGM MAME";
+  desktopItem = makeDesktopItem ({
+    desktopName = "MAME Tetris The Grandmaster";
+    name = "MAME TGM";
     exec = mainProgram;
     icon = mainProgram;
     categories = [ "Game" ];
-  } // desktopItemExtraAttrs;
+  } // desktopItemExtraAttrs);
 in {
   pname = "mame-wrapper-${mainProgram}";
   inherit (mame-tgm-unwrapped) version;

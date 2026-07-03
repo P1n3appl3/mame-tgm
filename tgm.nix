@@ -12,8 +12,8 @@
     gameName = "tgm";
     extraArgs = [ "-rec" "tgm1.input" "tgmj" ];
     desktopItemExtraAttrs = {
-      name = "Tetris The Grandmaster";
-      desktopName = "TGM";
+      desktopName = "Tetris The Grandmaster";
+      name = "TGM";
       comment = "The first TGM game";
     };
     icon = fetchurl {
@@ -25,8 +25,8 @@
     gameName = "tap";
     extraArgs = [ "-rec" "tap.input" "tgm2p" ];
     desktopItemExtraAttrs = {
-      name = "Tetris The Grandmaster";
-      desktopName = "TAP";
+      desktopName = "Tetris The Absolute The Grand Master 2 PLUS";
+      name = "TAP";
       comment = "The second TGM game";
     };
     icon = fetchurl {
