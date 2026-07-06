@@ -15,7 +15,7 @@
       {
         packages = {
           default = pkgs.mame-tgm;
-          inherit (pkgs) mame-tgm;
+          inherit (pkgs) mame-tgm mame-tgm-unwrapped;
           inherit (pkgs.tgm-games) tap tgm;
         };
         checks = pkgs.mame-tgm-unwrapped.tests;
